@@ -16,26 +16,20 @@ void freeList(Node** head);
 
 //funções de ação(MERGE)
 Node* merge(Node* array1, Node* array2);
+void insert(Node** head, int n);
 
 int main()
 {
-    Node *list1 = NULL;
+
+	int tamanho1 = 0, tamanho2 = 0;
+	scanf("%d %d", &tamanho1, &tamanho2);
+	
+	Node *list1 = NULL;
 	Node *list2 = NULL;
 
-	//adicionando valores na lista
-	append(&list1, 10);
-	append(&list1, 20);
-	append(&list1, 30);
-	append(&list1, 40);
-	append(&list1, 50);
+	insert(&list1, tamanho1);
+	insert(&list2, tamanho2);
 
-	//adicionando valores na lista 2
-	append(&list2, 60);
-	append(&list2, 70);
-	append(&list2, 80);
-	append(&list2, 90);
-	append(&list2, 100);
-	
 	printf("lista 1: \n");
 	displayList(list1);
 	printf("\n");
@@ -44,7 +38,7 @@ int main()
 	
 	Node* listMerge = merge(list1, list2);
 
-	printf("lista 3: \n");
+	printf("\nLista mesclada:\n");
 	displayList(listMerge);
 
 	freeList(&list1);
@@ -70,13 +64,15 @@ Node* createNode(int valor){
 
 //mostrando a lista na tela
 void displayList(Node* head){
-
-	Node* temp = head;
-
-	while(temp != NULL){
-		printf("%d -> ", temp->data);
-		temp = temp ->next;
-	}
+    Node* temp = head;
+    while(temp != NULL){
+        printf("%d", temp->data);
+        temp = temp->next;
+        if(temp != NULL){
+            printf(" -> ");
+        }
+    }
+    printf("\n");
 }
 
 //função que adicona valores na lista
@@ -118,28 +114,41 @@ void freeList(Node** head){
 //essa função recebe duas listas encadeadas e junta as duas
 Node* merge(Node* array1, Node* array2){
 
-	Node* newArray = NULL;
-	Node* last = NULL;
+	Node* newArray = NULL; 
+    Node* last = NULL;     
 
-	while(array1 != NULL || array2 != NULL){
-		Node* newNode = createNode(0);
-		if(array1 != NULL)
-		{
-			newNode->data += array1->data;
-			array1 = array1->next;
-		}
-		if(array2 != NULL){
-			newNode->data += array2->data;
-			array2 = array2->next;
-		}
+    while (array1 != NULL) {
+        Node* newNode = createNode(array1->data);
+        if (newArray == NULL) {
+            newArray = newNode;
+        } else {
+            last->next = newNode;
+        }
+        last = newNode; 
+        array1 = array1->next;
+    }
 
-		if(newArray == NULL){
-			newArray = newNode;
-		}else{
-			last->next = newNode;
-		}
-		last = newNode;
+    while (array2 != NULL) {
+        Node* newNode = createNode(array2->data);
+        if (newArray == NULL) {
+            newArray = newNode;
+        } else {
+            last->next = newNode;
+        }
+        last = newNode;
+        array2 = array2->next;
+    }
+
+    return newArray;
+}
+
+//Usuario inserir numeros
+void insert(Node** head, int n)
+{
+	for(int i = 0; i < n; i++)
+	{
+		int value = 0;
+		scanf("%d", &value);
+		append(head, value);
 	}
-
-	return newArray;
 }
