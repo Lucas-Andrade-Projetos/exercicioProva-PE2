@@ -10,13 +10,17 @@ typedef struct node
 
 //funções de controle
 Node* createNode(int valor);
+void appendFim(Node **head, int data);
+void appendIni(Node **head, int data);
+void appendMid(Node **head, int data, int last);
 void displayList(Node* head);
-void append(Node **head, int data);
 void freeList(Node** head);
 
 //funções de ação(MERGE)
 Node* merge(Node* array1, Node* array2);
-void insert(Node** head, int n);
+void insertFim(Node** head, int n);
+void insertIni(Node** head, int n);
+
 
 int main()
 {
@@ -27,8 +31,8 @@ int main()
 	Node *list1 = NULL;
 	Node *list2 = NULL;
 
-	insert(&list1, tamanho1);
-	insert(&list2, tamanho2);
+	insertIni(&list1, tamanho1);
+	insertFim(&list2, tamanho2);
 
 	printf("lista 1: \n");
 	displayList(list1);
@@ -62,21 +66,8 @@ Node* createNode(int valor){
     return newNode;
 }
 
-//mostrando a lista na tela
-void displayList(Node* head){
-    Node* temp = head;
-    while(temp != NULL){
-        printf("%d", temp->data);
-        temp = temp->next;
-        if(temp != NULL){
-            printf(" -> ");
-        }
-    }
-    printf("\n");
-}
-
-//função que adicona valores na lista
-void append(Node **head, int data){
+//função que adicona valores no final da lista
+void appendFim(Node **head, int data){
 	
 	Node *newNode = createNode(data);
 
@@ -95,7 +86,54 @@ void append(Node **head, int data){
 		}
 		temp->next = newNode;
 	}
+}
 
+//funcao que adiciona um valor no inicio da fila
+void appendIni(Node **head, int data){
+	Node *newNode = createNode(data);
+
+	if(newNode == NULL){
+		return;
+	}else{
+		newNode->data = data;
+		newNode->next = *head;
+		*head = newNode;
+	}	
+}
+
+//funcao que adiciona um valor no meio da fila
+void appendMid(Node **head, int data, int last){
+	Node *newNode = createNode(data);
+
+	if(newNode == NULL){
+		return;
+	}else{
+		if(*head == NULL){
+			newNode->next = NULL;
+			*head = newNode;
+		}else{
+			Node* temp = *head;
+
+			while(temp->data != last && temp->next){
+				temp = temp->next;
+			}
+			newNode->next = temp->next;
+			temp->next = newNode;
+		}
+	}
+}
+
+//mostrando a lista na tela
+void displayList(Node* head){
+    Node* temp = head;
+    while(temp != NULL){
+        printf("%d", temp->data);
+        temp = temp->next;
+        if(temp != NULL){
+            printf(" -> ");
+        }
+    }
+    printf("\n");
 }
 
 //Liberando dados 
@@ -142,13 +180,24 @@ Node* merge(Node* array1, Node* array2){
     return newArray;
 }
 
-//Usuario inserir numeros
-void insert(Node** head, int n)
+//Usuario inserir numeros no fim da fila
+void insertFim(Node** head, int n)
 {
 	for(int i = 0; i < n; i++)
 	{
 		int value = 0;
 		scanf("%d", &value);
-		append(head, value);
+		appendFim(head, value);
+	}
+}
+
+//Usuario inserir numeros no inicio da fila
+void insertIni(Node** head, int n)
+{
+	for(int i = 0; i < n; i++)
+	{
+		int value = 0;
+		scanf("%d", &value);
+		appendIni(head, value);
 	}
 }
